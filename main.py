@@ -1,10 +1,9 @@
 def main() -> int:
-    filepath = "books/frankenstein.txt"
-    content = read_book(filepath)
+    book = "books/frankenstein.txt"
+    content = read_book(book)
     wc = word_count(content)
-    print("word count: ", wc)
     lc = letter_count(content)
-    print("letter count: ", lc)
+    print_report(book, wc, lc)
     return 0
 
 
@@ -27,6 +26,30 @@ def letter_count(content: str) -> dict[str, int]:
             letter_dict[lower_letter] = 1
 
     return letter_dict
+
+
+def to_list_letter_dict(letter_count: dict[str, int]):
+    list_dict = []
+    for k, v in letter_count.items():
+        if k.isalpha():
+            list_dict.append({"letter": k, "count": v})
+    return list_dict
+
+
+def sort_on(dict):
+    return dict["count"]
+
+
+def print_report(book: str, word_count: int, letter_count: dict[str, int]) -> None:
+    print(f"--- Begin report of {book} ---")
+    print(f"{word_count} words found in the document")
+
+    list_letter_count = to_list_letter_dict(letter_count)
+    list_letter_count.sort(key=sort_on, reverse=True)
+    for lc in list_letter_count:
+        print(f"The '{lc["letter"]}' character was found {lc["count"]} times")
+
+    print("--- End report ---")
 
 
 main()
